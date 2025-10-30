@@ -1,18 +1,43 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>File Uploader</h1>
-<p>Esta aplicación permite subir y gestionar archivos de forma sencilla.</p>
-<ul>
-    <li>Sube archivos desde tu equipo.</li>
-    <li>Visualiza y descarga archivos compartidos.</li>
-    <li>Tipos y límites configurables en el servidor.</li>
-</ul>
+<main class="page">
+  <section class="hero" style="display:flex;flex-direction:column;gap:12px;padding:12px 6px">
+    <h1 style="margin:0 0 6px">File Uploader</h1>
+    <p class="note" style="margin:0">Sube, comparte y descarga archivos de forma sencilla. Esta aplicación es de ejemplo y puede contener vulnerabilidades intencionadas.</p>
+    <div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap">
+      <a href="{{ url_for('upload') }}" style="display:inline-block;background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:600;">Subir archivo</a>
+      <a href="{{ url_for('download') }}" style="display:inline-block;padding:8px 12px;border-radius:8px;text-decoration:none;border:1px solid var(--border;color:inherit);">Explorar archivos</a>
+    </div>
+  </section>
 
-<p>Para subir un archivo, ve a <a href="/upload">Subir archivo</a>.</p>
+  <section class="features" style="margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+    <article class="feature" style="padding:12px;border-radius:8px;border:1px solid var(--border);background:#fff">
+      <h3 style="margin:0 0 6px">Subida rápida</h3>
+      <p class="note" style="margin:0">Selecciona un fichero y súbelo al directorio <code>uploads/</code>.</p>
+    </article>
 
-{% if session.user %}
-    <p>Conectado como: {{ session.user }} — <a href="/upload">Subir archivo</a></p>
-{% else %}
-    <p>No estás identificado. <a href="/login">Iniciar sesión</a> para poder subir archivos.</p>
-{% endif %}
+    <article class="feature" style="padding:12px;border-radius:8px;border:1px solid var(--border);background:#fff">
+      <h3 style="margin:0 0 6px">Descargas</h3>
+      <p class="note" style="margin:0">Lista y descarga ficheros; prueba búsquedas y la funcionalidad de descarga.</p>
+    </article>
+
+    <article class="feature" style="padding:12px;border-radius:8px;border:1px solid var(--border);background:#fff">
+      <h3 style="margin:0 0 6px">Mensajes</h3>
+      <p class="note" style="margin:0">Muro para publicar mensajes (contenido intencionalmente inseguro).</p>
+    </article>
+
+    <article class="feature" style="padding:12px;border-radius:8px;border:1px solid var(--border);background:#fff">
+      <h3 style="margin:0 0 6px">Prácticas</h3>
+      <p class="note" style="margin:0">Diseñada para pruebas de seguridad en un entorno controlado.</p>
+    </article>
+  </section>
+
+  <section style="margin-top:18px">
+    {% if session.get('user') %}
+      <div class="note">Conectado como: <strong>{{ session.get('user') }}</strong> — <a href="{{ url_for('upload') }}">Subir</a> · <a href="{{ url_for('logout') }}">Cerrar sesión</a></div>
+    {% else %}
+      <div class="note">No estás identificado. <a href="{{ url_for('login') }}">Iniciar sesión</a> o <a href="{{ url_for('register') }}">registrarse</a>.</div>
+    {% endif %}
+  </section>
+</main>
 {% endblock %}

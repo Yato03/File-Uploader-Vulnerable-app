@@ -36,7 +36,6 @@ nav{
   flex-wrap:wrap;
   gap:8px 16px;
   align-items:center;
-  margin-bottom:16px;
   font-size:0.95rem;
 }
 nav a{
