@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>File Uploader</h1>
+<p>Esta aplicación permite subir y gestionar archivos de forma sencilla.</p>
+<ul>
+    <li>Sube archivos desde tu equipo.</li>
+    <li>Visualiza y descarga archivos compartidos.</li>
+    <li>Tipos y límites configurables en el servidor.</li>
+</ul>
+
+<p>Para subir un archivo, ve a <a href="/upload">Subir archivo</a>.</p>
+
+{% if session.user %}
+    <p>Conectado como: {{ session.user }} — <a href="/upload">Subir archivo</a></p>
+{% else %}
+    <p>No estás identificado. <a href="/login">Iniciar sesión</a> para poder subir archivos.</p>
+{% endif %}
+{% endblock %}

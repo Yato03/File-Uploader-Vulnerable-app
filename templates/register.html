@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body %}
+<main class="page">
+  <h2>Registro</h2>
+  <p class="note">Crea una cuenta de prueba (esta aplicación es deliberadamente insegura).</p>
+
+  <form method="post" novalidate>
+    <label>Usuario</label>
+    <input type="text" name="username" required placeholder="tu_usuario">
+
+    <label>Contraseña</label>
+    <input name="password" type="password" required placeholder="******">
+
+    <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+      <button type="submit">Registrar</button>
+      <a href="{{ url_for('login') }}" class="note" style="padding:6px 10px;border-radius:6px;text-decoration:none;">Ya tengo cuenta</a>
+    </div>
+  </form>
+</main>
+{% endblock %}

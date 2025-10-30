@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>Descargar fichero</h2>
+
+<form action="{{ url_for('download') }}" method="get">
+  <label>Nombre de fichero: <input type="text" name="file" placeholder="ej. ejemplo.txt"></label>
+  <button type="submit">Descargar</button>
+</form>
+
+<p>O usar acceso directo público (si existe): <code>/uploads/tu_fichero</code></p>
+
+<hr/>
+<p><strong>Nota:</strong> esta ruta es intencionadamente vulnerable en la aplicación de ejemplo.</p>
+{% endblock %}

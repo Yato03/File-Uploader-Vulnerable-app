@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>File Uploader</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <header class="site-header">
+      <div class="brand">
+        <a href="{{ url_for('index') }}">File Uploader</a>
+      </div>
+
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="{{ url_for('index') }}">Inicio</a></li>
+
+          {% if session.get('user') %}
+            <!-- Links for authenticated users -->
+            <li class="nav-item"><a href="{{ url_for('upload') }}">Subir</a></li>
+            <li class="nav-item"><a href="{{ url_for('download') }}">Descargar</a></li>
+            <li class="nav-item"><a href="{{ url_for('search') }}">Buscar</a></li>
+            <li class="nav-item"><a href="{{ url_for('logout') }}" class="primary">Logout</a></li>
+            <li class="nav-item user-label">Usuario: <strong>{{ session.get('user') }}</strong></li>
+          {% else %}
+            <!-- Links for anonymous users -->
+            <li class="nav-item"><a href="{{ url_for('register') }}">Registro</a></li>
+            <li class="nav-item"><a href="{{ url_for('login') }}">Login</a></li>
+            <li class="nav-item"><a href="{{ url_for('search') }}">Buscar</a></li>
+          {% endif %}
+
+        </ul>
+      </nav>
+    </header>
+
+    {% block body %}{% endblock %}
+  </div>
+</body>
+</html>
