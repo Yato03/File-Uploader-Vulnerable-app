@@ -126,9 +126,15 @@ def upload():
 @app.route('/download')
 def download():
     filename = request.args.get('file','').strip()
-    # Si no hay fichero solicitado, devuelve el formulario (download.html)
+    # Si no hay fichero solicitado, listar los archivos disponibles
     if not filename:
-        return render_template('download.html')
+        files = []
+        for fn in os.listdir(UPLOAD_FOLDER):
+            fp = os.path.join(UPLOAD_FOLDER, fn)
+            if os.path.isfile(fp):
+                files.append(fn)
+        return render_template('download.html', files=files)
+
     # comportamiento existente (intencionadamente vulnerable)
     path = os.path.join(UPLOAD_FOLDER, filename)
     if os.path.exists(path):

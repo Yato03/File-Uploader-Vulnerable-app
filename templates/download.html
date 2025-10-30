@@ -1,14 +1,23 @@
 {% extends "layout.html" %}
 {% block body %}
-<h2>Descargar fichero</h2>
+<main class="page">
+  <h2>Descargar fichero</h2>
+  <p class="note">Selecciona un fichero de la carpeta <code>uploads/</code> o introduce el nombre manualmente (esto permite probar path traversal).</p>
 
-<form action="{{ url_for('download') }}" method="get">
-  <label>Nombre de fichero: <input type="text" name="file" placeholder="ej. ejemplo.txt"></label>
-  <button type="submit">Descargar</button>
-</form>
+  {% if files %}
+    <ul>
+      {% for f in files %}
+        <li>
+          <strong>{{ f }}</strong>
+          — <a href="{{ url_for('download', file=f) }}">Descargar</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No hay ficheros en uploads/</p>
+  {% endif %}
 
-<p>O usar acceso directo público (si existe): <code>/uploads/tu_fichero</code></p>
 
-<hr/>
-<p><strong>Nota:</strong> esta ruta es intencionadamente vulnerable en la aplicación de ejemplo.</p>
+  <p class="note" style="margin-top:8px">Nota: la descarga es intencionadamente vulnerable en este ejemplo.</p>
+</main>
 {% endblock %}
