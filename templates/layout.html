@@ -21,6 +21,7 @@
             <li class="nav-item"><a href="{{ url_for('upload') }}">Subir</a></li>
             <li class="nav-item"><a href="{{ url_for('download') }}">Descargar</a></li>
             <li class="nav-item"><a href="{{ url_for('search') }}">Buscar</a></li>
+            <li class="nav-item"><a href="{{ url_for('messages') }}">Mensajes internos</a></li>
             <li class="nav-item"><a href="{{ url_for('logout') }}" class="primary">Logout</a></li>
             <li class="nav-item user-label">Usuario: <strong>{{ session.get('user') }}</strong></li>
           {% else %}

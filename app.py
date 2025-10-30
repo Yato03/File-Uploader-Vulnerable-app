@@ -36,11 +36,15 @@ def init_db():
 
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+@app.route('/messages')
+def messages():
     conn = get_db()
     c = conn.cursor()
     msgs = c.execute("SELECT * FROM messages ORDER BY id DESC").fetchall()
     conn.close()
-    return render_template('index.html', messages=msgs)
+    return render_template('messages.html', messages=msgs)
 
 @app.route('/register', methods=['GET','POST'])
 def register():
