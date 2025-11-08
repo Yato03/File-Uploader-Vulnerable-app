@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, session, send_file, send_from_directory
 import sqlite3, os
 from werkzeug.utils import secure_filename
+import subprocess, tempfile
 
 app = Flask(__name__)
 app.secret_key = 'insecure-secret-key'  # intentionally insecure
@@ -38,8 +39,8 @@ def init_db():
 def index():
     return render_template('index.html')
 
-@app.route('/messages')
-def messages():
+@app.route('/notes')
+def notes():
     conn = get_db()
     c = conn.cursor()
     msgs = c.execute("SELECT * FROM messages ORDER BY id DESC").fetchall()
@@ -92,21 +93,6 @@ def post():
     conn.close()
     return redirect(url_for('index'))
 
-@app.route('/search')
-def search():
-    # Reflected XSS example: parameter is reflected in the page without proper escaping
-    q = request.args.get('q','')
-    results = []
-    if q:
-        conn = get_db()
-        c = conn.cursor()
-        # SQL injection vulnerability (search)
-        sql = "SELECT username FROM users WHERE username LIKE '%%%s%%'" % (q)
-        for r in c.execute(sql):
-            results.append(r['username'])
-        conn.close()
-    return render_template('search.html', q=q, results=results)
-
 @app.route('/logout')
 def logout():
     # Cierra la sesión del usuario y redirige a la página principal
@@ -116,16 +102,39 @@ def logout():
 
 @app.route('/upload', methods=['GET','POST'])
 def upload():
-    if request.method=='POST':
+    if request.method == 'POST':
         f = request.files.get('file')
         if not f:
             return "No file"
-        # insecure file handling: we use the filename directly (and also secure it but still permit dangerous content)
-        filename = secure_filename(f.filename)
+        
+        #filename = secure_filename(f.filename) 
+        filename = f.filename
         path = os.path.join(UPLOAD_FOLDER, filename)
+        
+        # Save the uploaded file
         f.save(path)
-        return "Uploaded: %s" % filename
+        
+        return f"Uploaded and backed up: {filename}"
+    
     return render_template('upload.html')
+
+@app.route('/size')
+def size():
+    filename = request.args.get('file','').strip()
+    if not filename:
+        return "No file specified"
+    
+    path = os.path.join(UPLOAD_FOLDER, filename)
+    tf = tempfile.NamedTemporaryFile(delete=False)
+    tmp = tf.name
+    tf.close()
+    command = f"stat -c%s {path}"
+    print(f"Executing command: {command}")
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    print(f"Command output: {result.stdout}, Error: {result.stderr}")
+    output = result.stdout
+    
+    return f"{output}"
 
 @app.route('/download')
 def download():

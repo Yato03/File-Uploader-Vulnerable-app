@@ -2,6 +2,9 @@
 {% block body %}
 <main class="page">
   <h2>Descargar fichero</h2>
+
+  <p id="size">Tamaño de la carpeta uploads: </p>
+
   <p class="note">Selecciona un fichero de la carpeta <code>uploads/</code> o introduce el nombre manualmente (esto permite probar path traversal).</p>
 
   {% if files %}
@@ -20,4 +23,16 @@
 
   <p class="note" style="margin-top:8px">Nota: la descarga es intencionadamente vulnerable en este ejemplo.</p>
 </main>
+
+<script>
+const size = fetch('{{ url_for("size") }}?file=.')
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById('size').innerText += ' ' + data.trim() + ' bytes';
+  })
+  .catch(error => {
+    console.error('Error fetching size:', error);
+  });
+</script>
+
 {% endblock %}

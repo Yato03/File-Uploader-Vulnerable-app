@@ -151,7 +151,7 @@ button:hover{filter:brightness(0.95)}
 ul{list-style:none;margin-top:8px}
 li{padding:10px;border-bottom:1px solid var(--border)}
 li:last-child{border-bottom:none}
-li strong{display:block;color:#111827;margin-bottom:4px}
+li strong{display:inline;color:#111827;margin-bottom:4px}
 .content{color:#111827}
 
 /* Small helpers */
@@ -160,9 +160,107 @@ li strong{display:block;color:#111827;margin-bottom:4px}
   background:#fbfdff;padding:10px;border-radius:6px;border:1px solid var(--border);
 }
 
-/* Responsive */
+/* Download page specific styles */
+#size{
+  display:inline-block;
+  margin-bottom:10px;
+  padding:8px 10px;
+  border-radius:8px;
+  background:linear-gradient(180deg,#ffffff,#fbfdff);
+  border:1px solid var(--border);
+  color:var(--muted);
+  font-weight:600;
+  box-shadow:0 4px 10px rgba(16,24,40,0.03);
+}
+
+.page .download-form{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin:12px 0;
+}
+
+.page .download-form input[type="text"]{
+  max-width:520px;
+  min-width:160px;
+  flex:1 1 320px;
+}
+
+.download-list{
+  list-style:none;
+  margin:10px 0;
+  padding:0;
+  display:grid;
+  gap:8px;
+}
+
+.download-list li{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 12px;
+  border-radius:10px;
+  background:linear-gradient(180deg,#ffffff,#fbfdff);
+  border:1px solid var(--border);
+  box-shadow:0 6px 14px rgba(20,24,40,0.03);
+}
+
+.download-list li strong{
+  color:#0b2a66;
+  font-size:0.98rem;
+  word-break:break-all;
+}
+
+.download-list .actions{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.download-list .actions a{
+  text-decoration:none;
+  padding:6px 10px;
+  border-radius:8px;
+  font-size:0.9rem;
+  border:1px solid transparent;
+  transition:all .12s ease-in-out;
+  color:var(--accent);
+  background:transparent;
+}
+
+.download-list .actions a:hover{
+  transform:translateY(-2px);
+  background:rgba(37,99,235,0.06);
+}
+
+.download-list .actions a.download{
+  background:var(--accent);
+  color:#fff;
+  border-color:rgba(37,99,235,0.12);
+  box-shadow:0 6px 16px rgba(37,99,235,0.08);
+}
+
+/* Command output / preformatted text */
+.cmd-output pre, pre{
+  background:#f6f8fa;
+  border:1px solid var(--border);
+  padding:12px;
+  border-radius:8px;
+  overflow:auto;
+  max-height:320px;
+  font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
+  font-size:0.9rem;
+  color:#0b2340;
+}
+
+/* Small adjustments */
+.page .note{margin-top:10px}
 @media (max-width:640px){
   body{padding:12px}
   nav{font-size:0.9rem}
   .container{padding:0}
+  .download-list li{flex-direction:column;align-items:flex-start}
+  .download-list .actions{width:100%;justify-content:flex-start}
 }
