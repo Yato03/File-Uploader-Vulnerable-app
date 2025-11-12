@@ -1,10 +1,9 @@
 from flask import Flask, request, render_template, redirect, url_for, session, send_file, send_from_directory
 import sqlite3, os
-from werkzeug.utils import secure_filename
 import subprocess, tempfile
 
 app = Flask(__name__)
-app.secret_key = 'insecure-secret-key'  # intentionally insecure
+app.secret_key = 'insecure-secret-key' 
 
 DB = 'vuln.db'
 UPLOAD_FOLDER = 'uploads'
@@ -15,7 +14,6 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
-# Initialize DB (simple)
 def init_db():
     conn = get_db()
     c = conn.cursor()
@@ -52,7 +50,6 @@ def register():
     if request.method == 'POST':
         u = request.form.get('username')
         p = request.form.get('password')
-        # NO validation or hashing -> insecure authentication
         conn = get_db()
         c = conn.cursor()
         c.execute("INSERT INTO users (username, password, role) VALUES ('%s','%s','user')" % (u, p))
@@ -66,7 +63,6 @@ def login():
     if request.method=='POST':
         u = request.form.get('username')
         p = request.form.get('password')
-        # SQL injection vulnerability: query built by string concatenation
         conn = get_db()
         c = conn.cursor()
         q = "SELECT * FROM users WHERE username = '%s' AND password = '%s'" % (u, p)
@@ -85,7 +81,6 @@ def post():
     if 'user' not in session:
         return redirect(url_for('login'))
     content = request.form.get('content')
-    # Stored XSS: content stored and later rendered without escaping
     conn = get_db()
     c = conn.cursor()
     c.execute("INSERT INTO messages (user, content) VALUES ('%s','%s')" % (session['user'], content))
@@ -95,7 +90,6 @@ def post():
 
 @app.route('/logout')
 def logout():
-    # Cierra la sesión del usuario y redirige a la página principal
     session.pop('user', None)
     session.pop('role', None)
     return redirect(url_for('index'))
@@ -107,11 +101,9 @@ def upload():
         if not f:
             return "No file"
         
-        #filename = secure_filename(f.filename) 
         filename = f.filename
         path = os.path.join(UPLOAD_FOLDER, filename)
         
-        # Save the uploaded file
         f.save(path)
         
         return f"Uploaded and backed up: {filename}"
@@ -139,7 +131,6 @@ def size():
 @app.route('/download')
 def download():
     filename = request.args.get('file','').strip()
-    # Si no hay fichero solicitado, listar los archivos disponibles
     if not filename:
         files = []
         for fn in os.listdir(UPLOAD_FOLDER):
@@ -148,7 +139,6 @@ def download():
                 files.append(fn)
         return render_template('download.html', files=files)
 
-    # comportamiento existente (intencionadamente vulnerable)
     path = os.path.join(UPLOAD_FOLDER, filename)
     if os.path.exists(path):
         return send_file(path, as_attachment=True)
@@ -157,7 +147,6 @@ def download():
 
 @app.route('/uploads/<path:filename>')
 def uploads_public(filename):
-    # Sirve archivos desde UPLOAD_FOLDER sin autenticación
     return send_from_directory(UPLOAD_FOLDER, filename)
 
 if __name__ == '__main__':
